@@ -7,8 +7,30 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>About Me</h1>
-    <p>Contact me</p>
+    <h1>Contact Me</h1>
+    <p>If you have any questions or want to get in touch, please use the form below:</p>
+    
+    <!-- Contact Form -->
+    <form action="mailto:YOUR_EMAIL_ADDRESS" method="POST" enctype="text/plain">
+        <!-- Email Field -->
+        <label for="email">Your Email:</label>
+        <input id="email" name="email" type="email" required>
+        <br><br>
+
+        <!-- Subject Field -->
+        <label for="subject">Subject:</label>
+        <input id="subject" name="subject" required>
+        <br><br>
+
+        <!-- Message Field -->
+        <label for="body">Message:</label>
+        <textarea id="body" name="body" rows="5" required></textarea>
+        <br><br>
+
+        <!-- Submit Button -->
+        <button>Send</button>
+    </form>
+    
     <nav>
         <a href="index.html">Home</a> | 
         <a href="about.html">About</a> | 
