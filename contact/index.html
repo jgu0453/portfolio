@@ -3,40 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Jonathan Gu</title>
+    <title>Contact - Jonathan Gu</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <h1>Contact Me</h1>
-    <p>If you have any questions or want to get in touch, please use the form below:</p>
-    
-    <!-- Contact Form -->
-    <form action="mailto:jogu@ucsd.edu" method="POST" enctype="text/plain">
-        <!-- Email Field -->
-        <label for="email">Your Email:</label>
-        <input id="email" name="email" type="email" required>
-        <br><br>
+    <header>
+        <h1>Contact Me</h1>
+        <p>I'd love to hear from you! Please fill out the form below to get in touch.</p>
+    </header>
 
-        <!-- Subject Field -->
-        <label for="subject">Subject:</label>
-        <input id="subject" name="subject" required>
-        <br><br>
-
-        <!-- Message Field -->
-        <label for="body">Message:</label>
-        <textarea id="body" name="body" rows="5" required></textarea>
-        <br><br>
-
-        <!-- Submit Button -->
-        <button>Send</button>
-    </form>
-    
     <nav>
-        <a href="../index.html">Home</a> | 
-        <a href="../projects/index.html">Projects</a> | 
-        <a href="index.html">Contact</a> | 
-        <a href="../CV/index.html">CV</a> | 
+        <a href="../index.html">Home</a> |
+        <a href="../projects/index.html">Projects</a> |
+        <a href="index.html" aria-current="page">Contact</a> |
+        <a href="../CV/index.html">CV</a> |
         <a href="https://github.com/jgu0453" target="_blank">GitHub</a>
     </nav>
+
+    <main>
+        <form action="mailto:jogu@ucsd.edu" method="POST" enctype="text/plain">
+            <label for="email">Your Email:</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required>
+
+            <label for="subject">Subject:</label>
+            <input id="subject" name="subject" placeholder="Subject of your message" required>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="body" rows="5" placeholder="Write your message here..." required></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Jonathan Gu. All rights reserved.</p>
+    </footer>
 </body>
 </html>
