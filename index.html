@@ -3,23 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jonathan Gu: Personal site and portfolio</title>
-    <!-- Link to the CSS file -->
+    <title>Jonathan Gu: Personal Site and Portfolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Jonathan Gu</h1>
-    <p>Nah I'd win</p>
+    <header>
+        <h1>Jonathan Gu</h1>
+        <p>Welcome to my personal site and portfolio!</p>
+    </header>
 
     <nav>
-        <a href="index.html">Home</a> |
-        <a href="projects/index.html">Projects</a> | 
-        <a href="contact/index.html">Contact</a> | 
+        <a href="index.html" aria-current="page">Home</a> |
+        <a href="projects/index.html">Projects</a> |
+        <a href="contact/index.html">Contact</a> |
         <a href="CV/index.html">CV</a> |
         <a href="https://github.com/jgu0453" target="_blank">GitHub</a>
     </nav>
 
-    <!-- Adding an image -->
-    <img src="images/pepe.jpg" alt="pepe" style="width:300px; height:auto;">
+    <main>
+        <section>
+            <h2>About Me</h2>
+            <p>
+                Hello! I'm Jonathan, a computer science student passionate about building engaging web experiences. 
+                Explore my projects and learn more about my background!
+            </p>
+        </section>
+
+        <figure>
+            <img src="images/pepe.jpg" alt="Pepe the Frog" style="width:300px; height:auto;">
+            <figcaption>A representation of my inner thoughts as I code.</figcaption>
+        </figure>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Jonathan Gu. All rights reserved.</p>
+    </footer>
 </body>
 </html>
