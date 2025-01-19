@@ -1,72 +1,119 @@
+/* Global Styles */
 body {
-    background-color: #f9f9f9;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
+  font: 100%/1.5 system-ui; /* Set font size and line height */
+  margin: 0; /* Remove default browser margin */
+  padding: 20px; /* Add padding around the body */
+  background-color: #f9f9f9; /* Light background for better readability */
+  color: #333; /* Dark text color for good contrast */
 }
 
+/* Center Content */
+header, nav, main, footer {
+  max-width: 800px; /* Limit content width for readability */
+  margin: 0 auto; /* Center align the content */
+}
+
+/* Header Styling */
+header {
+  text-align: center;
+  margin-bottom: 20px; /* Add spacing below the header */
+}
+
+header h1 {
+  font-size: 2em; /* Larger font size for the main title */
+  margin: 0;
+}
+
+header p {
+  font-size: 1.2em; /* Slightly larger font for the tagline/intro text */
+  color: #555; /* Subtle color for secondary text */
+}
+
+/* Navigation Styles */
 nav {
-    background-color: #333;
-    color: white;
-    padding: 10px 0;
-    text-align: center;
+  background-color: #007acc; /* Light blue background for navigation */
+  padding: 10px; /* Add padding inside the nav bar */
+  border-radius: 8px; /* Rounded corners for the nav bar */
+  text-align: center;
+  margin-bottom: 20px; /* Spacing below the navigation */
 }
 
 nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
-    font-weight: bold;
+  color: #fff; /* White text for links */
+  text-decoration: none; /* Remove underline from links */
+  margin: 0 10px; /* Space between links */
 }
 
 nav a:hover {
-    text-decoration: underline;
+  text-decoration: underline; /* Underline links on hover */
 }
 
-h1 {
-    text-align: center;
-    color: #444;
+/* Main Content Styles */
+main {
+  background-color: #ffffff; /* White background for main content */
+  padding: 20px; /* Add padding inside the main content */
+  border-radius: 8px; /* Rounded corners for the main content */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
-img {
-    max-width: 100%;
-    height: auto;
+/* Footer Styling */
+footer {
+  text-align: center;
+  margin-top: 20px; /* Space above the footer */
+  color: #777; /* Lighter text color for footer */
+  font-size: 0.9em; /* Slightly smaller font size */
 }
 
+footer p {
+  margin: 0;
+}
+
+/* Image Styling */
+figure {
+  text-align: center;
+  margin: 20px 0; /* Add spacing around images */
+}
+
+figure img {
+  max-width: 100%; /* Make images responsive */
+  height: auto; /* Maintain aspect ratio */
+}
+
+figure figcaption {
+  font-size: 0.9em; /* Smaller font size for captions */
+  color: #555; /* Subtle color for captions */
+}
+
+/* Form Styles */
 form {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
+  background-color: #ffffff; /* White background for forms */
+  padding: 20px; /* Add padding inside the form */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+  display: block; /* Ensure labels are on their own line */
+  margin-bottom: 5px; /* Spacing below labels */
+  font-weight: bold; /* Make labels bold */
 }
 
-form input,
-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+form input, form textarea, form button {
+  width: 100%; /* Full width for inputs, textarea, and button */
+  padding: 10px; /* Padding inside inputs */
+  margin-bottom: 15px; /* Spacing between fields */
+  border: 1px solid #ccc; /* Light border for inputs */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 1em; /* Consistent font size */
 }
 
 form button {
-    background-color: #5cb85c;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  background-color: #007acc; /* Blue background for the button */
+  color: #fff; /* White text */
+  border: none; /* Remove border */
+  cursor: pointer; /* Pointer cursor on hover */
 }
 
 form button:hover {
-    background-color: #4cae4c;
+  background-color: #005fa3; /* Darker blue on hover */
 }
