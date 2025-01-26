@@ -13,7 +13,11 @@ function highlightCurrentPage() {
 
   navLinks.forEach((link) => {
     const linkPath = new URL(link.href).pathname;
-    if (linkPath === currentPage) {
+
+    // Highlight the Home link when on the home page
+    if (currentPage === "/" && link.getAttribute("href") === "index.html") {
+      link.classList.add("current");
+    } else if (linkPath === currentPage) {
       link.classList.add("current");
     }
   });
@@ -26,8 +30,8 @@ function setupDarkModeToggle() {
   darkModeButton.textContent = "Enable Dark Mode";
   darkModeButton.classList.add("dark-mode-toggle");
 
-  // Append the button to the body for top-right positioning
-  document.body.appendChild(darkModeButton);
+  // Append the button to the header
+  document.querySelector("header").appendChild(darkModeButton);
 
   // Toggle dark mode and update the button text
   function toggleDarkMode() {
