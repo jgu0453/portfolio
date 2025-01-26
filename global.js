@@ -1,5 +1,5 @@
 // Log message to indicate the script is running
-console.log("JavaScript loaded successfully!");
+console.log('IT’S ALIVE!');
 
 // Utility function to select multiple DOM elements
 function $$(selector, context = document) {
@@ -26,8 +26,8 @@ function setupDarkModeToggle() {
   darkModeButton.textContent = "Enable Dark Mode";
   darkModeButton.classList.add("dark-mode-toggle");
 
-  // Append the button to the footer
-  document.querySelector("footer").appendChild(darkModeButton);
+  // Append the button to the body for top-right positioning
+  document.body.appendChild(darkModeButton);
 
   // Toggle dark mode and update the button text
   function toggleDarkMode() {
