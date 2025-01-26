@@ -118,6 +118,11 @@ form button:hover {
   background-color: #005fa3; /* Darker blue on hover */
 }
 
+nav a.current {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 :root {
   --background-color: #f9f9f9;
   --text-color: #333;
