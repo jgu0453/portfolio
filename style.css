@@ -102,6 +102,7 @@ form label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  color: #333; /* Always keep labels black */
 }
 
 form input, form textarea, form button {
@@ -145,6 +146,11 @@ body.dark-mode main {
 
 body.dark-mode footer {
   color: #ccc;
+}
+
+/* Dark Mode Form Label */
+body.dark-mode form label {
+  color: #333; /* Maintain black labels in dark mode */
 }
 
 /* Dark Mode Button */
