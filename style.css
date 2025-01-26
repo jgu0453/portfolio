@@ -1,67 +1,73 @@
 /* Global Styles */
 body {
-  font: 100%/1.5 system-ui; /* Set font size and line height */
-  margin: 0; /* Remove default browser margin */
-  padding: 20px; /* Add padding around the body */
-  background-color: #f9f9f9; /* Light background for better readability */
-  color: #333; /* Dark text color for good contrast */
+  font: 100%/1.5 system-ui;
+  margin: 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s; /* Smooth transitions for dark mode */
 }
 
 /* Center Content */
 header, nav, main, footer {
-  max-width: 800px; /* Limit content width for readability */
-  margin: 0 auto; /* Center align the content */
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 /* Header Styling */
 header {
   text-align: center;
-  margin-bottom: 20px; /* Add spacing below the header */
+  margin-bottom: 20px;
 }
 
 header h1 {
-  font-size: 2em; /* Larger font size for the main title */
+  font-size: 2em;
   margin: 0;
 }
 
 header p {
-  font-size: 1.2em; /* Slightly larger font for the tagline/intro text */
-  color: #555; /* Subtle color for secondary text */
+  font-size: 1.2em;
+  color: #555;
 }
 
 /* Navigation Styles */
 nav {
-  background-color: #007acc; /* Light blue background for navigation */
-  padding: 10px; /* Add padding inside the nav bar */
-  border-radius: 8px; /* Rounded corners for the nav bar */
+  background-color: #007acc;
+  padding: 10px;
+  border-radius: 8px;
   text-align: center;
-  margin-bottom: 20px; /* Spacing below the navigation */
+  margin-bottom: 20px;
 }
 
 nav a {
-  color: #fff; /* White text for links */
-  text-decoration: none; /* Remove underline from links */
-  margin: 0 10px; /* Space between links */
+  color: #fff;
+  text-decoration: none;
+  margin: 0 10px;
 }
 
 nav a:hover {
-  text-decoration: underline; /* Underline links on hover */
+  text-decoration: underline;
+}
+
+nav a.current {
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 /* Main Content Styles */
 main {
-  background-color: #ffffff; /* White background for main content */
-  padding: 20px; /* Add padding inside the main content */
-  border-radius: 8px; /* Rounded corners for the main content */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Footer Styling */
 footer {
   text-align: center;
-  margin-top: 20px; /* Space above the footer */
-  color: #777; /* Lighter text color for footer */
-  font-size: 0.9em; /* Slightly smaller font size */
+  margin-top: 20px;
+  color: #777;
+  font-size: 0.9em;
 }
 
 footer p {
@@ -71,49 +77,88 @@ footer p {
 /* Image Styling */
 figure {
   text-align: center;
-  margin: 20px 0; /* Add spacing around images */
+  margin: 20px 0;
 }
 
 figure img {
-  max-width: 100%; /* Make images responsive */
-  height: auto; /* Maintain aspect ratio */
+  max-width: 100%;
+  height: auto;
 }
 
 figure figcaption {
-  font-size: 0.9em; /* Smaller font size for captions */
-  color: #555; /* Subtle color for captions */
+  font-size: 0.9em;
+  color: #555;
 }
 
 /* Form Styles */
 form {
-  background-color: #ffffff; /* White background for forms */
-  padding: 20px; /* Add padding inside the form */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 form label {
-  display: block; /* Ensure labels are on their own line */
-  margin-bottom: 5px; /* Spacing below labels */
-  font-weight: bold; /* Make labels bold */
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 form input, form textarea, form button {
-  width: 100%; /* Full width for inputs, textarea, and button */
-  padding: 10px; /* Padding inside inputs */
-  margin-bottom: 15px; /* Spacing between fields */
-  border: 1px solid #ccc; /* Light border for inputs */
-  border-radius: 4px; /* Rounded corners */
-  font-size: 1em; /* Consistent font size */
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
 }
 
 form button {
-  background-color: #007acc; /* Blue background for the button */
-  color: #fff; /* White text */
-  border: none; /* Remove border */
-  cursor: pointer; /* Pointer cursor on hover */
+  background-color: #007acc;
+  color: #fff;
+  border: none;
+  cursor: pointer;
 }
 
 form button:hover {
-  background-color: #005fa3; /* Darker blue on hover */
+  background-color: #005fa3;
+}
+
+/* Dark Mode Styling */
+body.dark-mode {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+body.dark-mode nav {
+  background-color: #333;
+}
+
+body.dark-mode nav a {
+  color: #f0f0f0;
+}
+
+body.dark-mode main {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.dark-mode footer {
+  color: #ccc;
+}
+
+/* Dark Mode Button */
+.dark-mode-toggle {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 15px;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.dark-mode-toggle:hover {
+  background-color: #005fa3;
 }
