@@ -113,6 +113,11 @@ form input, form textarea, form button {
   font-size: 1em;
 }
 
+/* Form Input Text Color */
+form input, form textarea {
+  color: black;
+}
+
 form button {
   background-color: #007acc;
   color: #fff;
