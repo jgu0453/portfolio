@@ -5,7 +5,7 @@ body {
   padding: 20px;
   background-color: #f9f9f9;
   color: #333;
-  transition: background-color 0.3s, color 0.3s; /* Smooth transitions for dark mode */
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* Center Content */
@@ -149,14 +149,18 @@ body.dark-mode footer {
 
 /* Dark Mode Button */
 .dark-mode-toggle {
-  display: block;
-  margin: 20px auto 0;
-  padding: 10px 15px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
   background-color: #007acc;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 0.9em;
   cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
 }
 
 .dark-mode-toggle:hover {
