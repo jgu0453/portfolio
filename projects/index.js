@@ -10,3 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     projectsContainer.innerHTML = '<p>Failed to load projects.</p>';
   }
 });
+
+async function fetchAPIData(url) {
+  try {
+    const response = await fetch(url);
