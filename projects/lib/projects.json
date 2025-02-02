@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Project One",
+    "description": "A brief description of Project One.",
+    "image": "images/project1.jpg"
+  },
+  {
+    "title": "Project Two",
+    "description": "A brief description of Project Two.",
+    "image": "images/project2.jpg"
+  }
+]
