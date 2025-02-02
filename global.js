@@ -47,7 +47,11 @@ function setupDarkModeToggle() {
   }
 }
 
-// Function to fetch JSON data
+/**
+ * Fetches JSON data from the specified URL.
+ * @param {string} url - The URL to fetch JSON data from.
+ * @returns {Promise<Object|null>} - A promise that resolves to the JSON data or null if an error occurs.
+ */
 export async function fetchJSON(url) {
   try {
     const response = await fetch(url);
@@ -61,8 +65,20 @@ export async function fetchJSON(url) {
   }
 }
 
-// Run all the functions on page load
-document.addEventListener("DOMContentLoaded", () => {
-  highlightCurrentPage();
-  setupDarkModeToggle();
-});
+/**
+ * Renders projects into the specified container element.
+ * @param {Array} projects - An array of project objects.
+ * @param {HTMLElement} container - The DOM element to render the projects into.
+ */
+export function renderProjects(projects, container) {
+  container.innerHTML = ''; // Clear existing content
+  projects.forEach((project) => {
+    const article = document.createElement('article');
+    article.innerHTML = `
+      <h3>${project.title}</h3>
+      <img src="${project.image}" alt="${project.title}">
+      <p>${project.description}</p>
+    `;
+    container.appendChild(article);
+  });
+}
