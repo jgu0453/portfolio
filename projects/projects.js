@@ -1,4 +1,4 @@
-import { fetchJSON } from './global.js';
+import { fetchJSON, renderProjects } from '../global.js';
 
 function renderProjects(projects, container) {
   container.innerHTML = ''; // Clear any existing content
