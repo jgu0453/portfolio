@@ -1,5 +1,4 @@
-import { fetchJSON } from './global.js';
-import { renderProjects } from './projects.js';
+import { fetchJSON, renderProjects, fetchGithubData } from './global.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const projectsContainer = document.querySelector('.latest-projects');
