@@ -47,9 +47,22 @@ function setupDarkModeToggle() {
   }
 }
 
+// Function to fetch JSON data
+export async function fetchJSON(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(`Could not fetch JSON from ${url}: ${error}`);
+    return null;
+  }
+}
+
 // Run all the functions on page load
 document.addEventListener("DOMContentLoaded", () => {
   highlightCurrentPage();
   setupDarkModeToggle();
 });
-
