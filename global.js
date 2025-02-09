@@ -66,7 +66,7 @@ export async function fetchJSON(url) {
 }
 
 // Function to render projects dynamically
-export function renderProjects(projects, container, headingLevel = 'h2') {
+export function renderProjects(projects, container, headingLevel = 'h3') {
     if (!container) {
         console.error("Projects container not found!");
         return;
@@ -83,14 +83,11 @@ export function renderProjects(projects, container, headingLevel = 'h2') {
         heading.textContent = project.title;
         article.appendChild(heading);
 
-        // Project image (fallback to placeholder if error occurs)
-        if (project.image) {
-            const img = document.createElement('img');
-            img.src = project.image;
-            img.alt = project.title;
-            img.onerror = () => { img.src = '../assets/placeholder.png'; };
-            article.appendChild(img);
-        }
+        // Project image
+        const img = document.createElement('img');
+        img.src = project.image || '../assets/placeholder.png'; // Fallback image
+        img.alt = project.title;
+        article.appendChild(img);
 
         // Project description
         const description = document.createElement('p');
