@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupDarkModeToggle();
 });
 
+// Function to fetch JSON data
 export async function fetchJSON(url) {
     try {
         const response = await fetch(url);
@@ -60,46 +61,51 @@ export async function fetchJSON(url) {
         }
         return await response.json();
     } catch (error) {
-        console.error('Error fetching or parsing JSON data:', error);
+        console.error('Error fetching JSON:', error);
     }
 }
 
-export function renderProjects(projects, containerElement, headingLevel = 'h2') {
-    // Clear existing content
-    containerElement.innerHTML = '';
+// Function to render projects dynamically
+export function renderProjects(projects, container, headingLevel = 'h2') {
+    if (!container) {
+        console.error("Projects container not found!");
+        return;
+    }
+
+    container.innerHTML = ''; // Clear previous content
 
     projects.forEach(project => {
-        // Create an article element for each project
         const article = document.createElement('article');
         article.classList.add('project');
 
-        // Dynamically set the heading level
+        // Project title
         const heading = document.createElement(headingLevel);
         heading.textContent = project.title;
         article.appendChild(heading);
 
-        // Add project image if available
+        // Project image (fallback to placeholder if error occurs)
         if (project.image) {
             const img = document.createElement('img');
             img.src = project.image;
             img.alt = project.title;
-            img.onerror = () => { img.src = '../assets/placeholder.png'; }; // Fallback image
+            img.onerror = () => { img.src = '../assets/placeholder.png'; };
             article.appendChild(img);
         }
 
-        // Add project description
+        // Project description
         const description = document.createElement('p');
         description.textContent = project.description;
         article.appendChild(description);
 
-        // Add project link
-        const link = document.createElement('a');
-        link.href = project.link;
-        link.textContent = 'View Project';
-        link.target = '_blank';
-        article.appendChild(link);
+        // Project link
+        if (project.link) {
+            const link = document.createElement('a');
+            link.href = project.link;
+            link.textContent = 'View Project';
+            link.target = '_blank';
+            article.appendChild(link);
+        }
 
-        // Append the article to the container
-        containerElement.appendChild(article);
+        container.appendChild(article);
     });
 }
