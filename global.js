@@ -52,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setupDarkModeToggle();
 });
 
-// global.js
 export async function fetchJSON(url) {
     try {
         const response = await fetch(url);
@@ -64,5 +63,36 @@ export async function fetchJSON(url) {
     } catch (error) {
         console.error('Error fetching or parsing JSON data:', error);
     }
+}
+
+export function renderProjects(projects, containerElement, headingLevel = 'h2') {
+    // Clear existing content
+    containerElement.innerHTML = '';
+
+    projects.forEach(project => {
+        // Create an article element for each project
+        const article = document.createElement('article');
+        article.classList.add('project');
+
+        // Dynamically set the heading level
+        const heading = document.createElement(headingLevel);
+        heading.textContent = project.title;
+        article.appendChild(heading);
+
+        // Add project description
+        const description = document.createElement('p');
+        description.textContent = project.description;
+        article.appendChild(description);
+
+        // Add project link
+        const link = document.createElement('a');
+        link.href = project.link;
+        link.textContent = 'View Project';
+        link.target = '_blank';
+        article.appendChild(link);
+
+        // Append the article to the container
+        containerElement.appendChild(article);
+    });
 }
 
