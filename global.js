@@ -58,8 +58,7 @@ export async function fetchJSON(url) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error('Error fetching or parsing JSON data:', error);
     }
@@ -79,6 +78,15 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
         heading.textContent = project.title;
         article.appendChild(heading);
 
+        // Add project image if available
+        if (project.image) {
+            const img = document.createElement('img');
+            img.src = project.image;
+            img.alt = project.title;
+            img.onerror = () => { img.src = '../assets/placeholder.png'; }; // Fallback image
+            article.appendChild(img);
+        }
+
         // Add project description
         const description = document.createElement('p');
         description.textContent = project.description;
@@ -95,4 +103,3 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
         containerElement.appendChild(article);
     });
 }
-
