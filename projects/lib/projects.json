@@ -2,21 +2,25 @@
   {
     "title": "Personal Java Game",
     "description": "A personal platform game coded in Java.",
-    "link": "https://github.com/jgu0453/Game"
+    "link": "https://github.com/jgu0453/Game",
+    "image": "../assets/java-game.png"
   },
   {
     "title": "Weather App",
     "description": "A web application that fetches and displays real-time weather data based on user input.",
-    "link": "https://github.com/jgu0453/weather-app"
+    "link": "https://github.com/jgu0453/weather-app",
+    "image": "../assets/weather-app.png"
   },
   {
     "title": "Task Manager",
     "description": "A simple to-do list app with task categorization and deadline tracking.",
-    "link": "https://github.com/jgu0453/task-manager"
+    "link": "https://github.com/jgu0453/task-manager",
+    "image": "../assets/task-manager.png"
   },
   {
     "title": "Snake Game",
     "description": "A classic snake game built with JavaScript and Canvas API.",
-    "link": "https://github.com/jgu0453/snake-game"
+    "link": "https://github.com/jgu0453/snake-game",
+    "image": "../assets/snake-game.png"
   }
 ]
