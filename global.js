@@ -31,7 +31,7 @@ function setupDarkModeToggle() {
   // Toggle dark mode and update the button text
   function toggleDarkMode() {
     const isDarkMode = body.classList.toggle("dark-mode");
-    darkModeButton.textContent = isDarkMode ? "Disable Dark Mode" : "Enable Dark Mode";
+    darkModeButton.textContent = isDarkMode ? "Disable Dark Mode" : "Dark Mode";
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }
 
