@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const projectsContainer = document.querySelector('.projects');
 
     try {
-        const projects = await fetchJSON('projects.json');
+        const projects = await fetchJSON('./lib/projects.json');
         if (projects) {
             renderProjects(projects, projectsContainer, 'h3');
         } else {
