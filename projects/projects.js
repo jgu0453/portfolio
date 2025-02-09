@@ -1,21 +1,17 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const projectsContainer = document.querySelector(".projects");
+// projects.js
+import { fetchJSON, renderProjects } from './global.js';
 
-  try {
-    const response = await fetch("projects.json");
-    const projects = await response.json();
+document.addEventListener('DOMContentLoaded', async () => {
+    const projectsContainer = document.querySelector('.projects');
 
-    projects.forEach(project => {
-      const projectElement = document.createElement("div");
-      projectElement.classList.add("project");
-      projectElement.innerHTML = `
-        <h3>${project.title}</h3>
-        <p>${project.description}</p>
-        <a href="${project.link}" target="_blank">View Project</a>
-      `;
-      projectsContainer.appendChild(projectElement);
-    });
-  } catch (error) {
-    console.error("Failed to load projects:", error);
-  }
+    try {
+        const projects = await fetchJSON('projects.json');
+        if (projects) {
+            renderProjects(projects, projectsContainer, 'h3');
+        } else {
+            console.error('No projects data found.');
+        }
+    } catch (error) {
+        console.error('Failed to load projects:', error);
+    }
 });
