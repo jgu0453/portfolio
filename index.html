@@ -35,6 +35,24 @@
             <figcaption>Nah I'd win</figcaption>
         </figure>
 
+        <section class="featured-projects">
+            <h2>Featured Projects</h2>
+            <div class="projects-preview"></div>
+        </section>
+        
+        <script type="module">
+            import { fetchJSON, renderProjects } from '../global.js';
+        
+            document.addEventListener("DOMContentLoaded", async () => {
+                const previewContainer = document.querySelector(".projects-preview");
+                const projects = await fetchJSON('../projects.json');
+        
+                if (projects) {
+                    renderProjects(projects.slice(0, 3), previewContainer, 'h3'); // Show only first 3 projects
+                }
+            });
+        </script>
+
     </main>
 
     <button class="dark-mode-toggle">Dark Mode</button>
