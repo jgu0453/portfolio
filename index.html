@@ -41,11 +41,11 @@
         </section>
         
         <script type="module">
-            import { fetchJSON, renderProjects } from 'global.js';
+            import { fetchJSON, renderProjects } from './global.js';
         
             document.addEventListener("DOMContentLoaded", async () => {
                 const previewContainer = document.querySelector(".projects-preview");
-                const projects = await fetchJSON('projects/lib/projects.json');
+                const projects = await fetchJSON('./projects/lib/projects.json');
         
                 if (projects) {
                     renderProjects(projects.slice(0, 3), previewContainer, 'h3'); // Show only first 3 projects
