@@ -1,1 +1,22 @@
-
+[
+  {
+    "title": "Personal Portfolio Website",
+    "description": "A personal website showcasing my projects, resume, and contact information.",
+    "link": "https://github.com/jgu0453/personal-portfolio"
+  },
+  {
+    "title": "Weather App",
+    "description": "A web application that fetches and displays real-time weather data based on user input.",
+    "link": "https://github.com/jgu0453/weather-app"
+  },
+  {
+    "title": "Task Manager",
+    "description": "A simple to-do list app with task categorization and deadline tracking.",
+    "link": "https://github.com/jgu0453/task-manager"
+  },
+  {
+    "title": "Snake Game",
+    "description": "A classic snake game built with JavaScript and Canvas API.",
+    "link": "https://github.com/jgu0453/snake-game"
+  }
+]
