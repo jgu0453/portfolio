@@ -1,4 +1,3 @@
-// Log message to indicate the script is running
 console.log('IT’S ALIVE!');
 
 // Utility function to select multiple DOM elements
@@ -22,12 +21,12 @@ function highlightCurrentPage() {
 // Dark mode toggle functionality
 function setupDarkModeToggle() {
   const body = document.body;
-  const darkModeButton = document.createElement("button");
-  darkModeButton.textContent = "Enable Dark Mode";
-  darkModeButton.classList.add("dark-mode-toggle");
+  const darkModeButton = document.querySelector(".dark-mode-toggle");
 
-  // Append the button to the body for top-right positioning
-  document.body.appendChild(darkModeButton);
+  if (!darkModeButton) {
+    console.warn("Dark mode button not found!");
+    return;
+  }
 
   // Toggle dark mode and update the button text
   function toggleDarkMode() {
@@ -46,3 +45,9 @@ function setupDarkModeToggle() {
     darkModeButton.textContent = "Disable Dark Mode";
   }
 }
+
+// Run functions on page load
+document.addEventListener("DOMContentLoaded", () => {
+  highlightCurrentPage();
+  setupDarkModeToggle();
+});
