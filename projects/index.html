@@ -36,5 +36,23 @@
         <p>&copy; 2025 Jonathan Gu. All rights reserved.</p>
     </footer>
 
+    <script type="module">
+        import { fetchJSON, renderProjects } from './projects.js';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const projectsContainer = document.querySelector('.projects');
+
+            try {
+                const projects = await fetchJSON('./lib/projects.json');
+                if (projects) {
+                    renderProjects(projects, projectsContainer, 'h3');
+                } else {
+                    console.error('No projects data found.');
+                }
+            } catch (error) {
+                console.error('Failed to load projects:', error);
+            }
+        });
+    </script>
 </body>
 </html>
