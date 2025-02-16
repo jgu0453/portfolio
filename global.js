@@ -1,3 +1,4 @@
+// global.js
 console.log('IT’S ALIVE!');
 
 // Utility function to select multiple DOM elements
@@ -54,55 +55,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Function to fetch JSON data
 export async function fetchJSON(url) {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching JSON:', error);
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching JSON:', error);
+  }
 }
 
 // Function to render projects dynamically
 export function renderProjects(projects, container, headingLevel = 'h3') {
-    if (!container) {
-        console.error("Projects container not found!");
-        return;
+  if (!container) {
+    console.error("Projects container not found!");
+    return;
+  }
+
+  container.innerHTML = ''; // Clear previous content
+
+  projects.forEach(project => {
+    const article = document.createElement('article');
+    article.classList.add('project');
+
+    // Project title
+    const heading = document.createElement(headingLevel);
+    heading.textContent = project.title;
+    article.appendChild(heading);
+
+    // Project year
+    const year = document.createElement('p');
+    year.classList.add('project-year');
+    year.textContent = `Year: ${project.year}`;
+    article.appendChild(year);
+
+    // Project image
+    const img = document.createElement('img');
+    img.src = project.image || '../assets/placeholder.png'; // Fallback image
+    img.alt = project.title;
+    article.appendChild(img);
+
+    // Project description
+    const description = document.createElement('p');
+    description.textContent = project.description;
+    article.appendChild(description);
+
+    // Project link
+    if (project.link) {
+      const link = document.createElement('a');
+      link.href = project.link;
+      link.textContent = 'View Project';
+      link.target = '_blank';
+      article.appendChild(link);
     }
 
-    container.innerHTML = ''; // Clear previous content
-
-    projects.forEach(project => {
-        const article = document.createElement('article');
-        article.classList.add('project');
-
-        // Project title
-        const heading = document.createElement(headingLevel);
-        heading.textContent = project.title;
-        article.appendChild(heading);
-
-        // Project image
-        const img = document.createElement('img');
-        img.src = project.image || '../assets/placeholder.png'; // Fallback image
-        img.alt = project.title;
-        article.appendChild(img);
-
-        // Project description
-        const description = document.createElement('p');
-        description.textContent = project.description;
-        article.appendChild(description);
-
-        // Project link
-        if (project.link) {
-            const link = document.createElement('a');
-            link.href = project.link;
-            link.textContent = 'View Project';
-            link.target = '_blank';
-            article.appendChild(link);
-        }
-
-        container.appendChild(article);
-    });
+    container.appendChild(article);
+  });
 }
