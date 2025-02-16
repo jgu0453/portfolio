@@ -9,9 +9,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     allProjects = await fetchJSON('./lib/projects.json');
     if (allProjects) {
-      // Always render projects list from the (possibly filtered) data
+      // Save full dataset globally for filtering by pie chart clicks.
+      window.allProjectsData = allProjects;
+      // Render full projects list
       renderProjects(allProjects, projectsContainer, 'h3');
-      // Render the pie chart once, using the full dataset.
+      // Render the pie chart once using the full dataset.
       renderPieChart(allProjects);
     } else {
       console.error('No projects data found.');
@@ -20,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Failed to load projects:', error);
   }
 
-  // Search functionality: only filter the projects list.
+  // Search functionality: filter the projects list only.
   searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase();
     const filteredProjects = allProjects.filter(project =>
@@ -29,12 +31,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       project.year.toString().includes(query)
     );
     renderProjects(filteredProjects, projectsContainer, 'h3');
-    // Do not re-render pie chart on search.
+    // Do not re-render the pie chart on search.
   });
 });
 
 function renderPieChart(projects) {
-  // Aggregate project counts by year
+  // Aggregate project counts by year from the full dataset
   const yearCounts = projects.reduce((acc, project) => {
     acc[project.year] = (acc[project.year] || 0) + 1;
     return acc;
@@ -48,11 +50,12 @@ function renderPieChart(projects) {
   const width = 400;
   const height = 400;
   const radius = Math.min(width, height) / 2;
+  const hoverRadius = radius - 10 + 10; // Increase outer radius by 10 on hover
 
   // Use D3's schemeCategory10 for colors
   const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-  // Clear any existing pie chart
+  // Clear any existing pie chart elements
   clearPieChart();
 
   const svg = d3.select('#pie-chart')
@@ -65,15 +68,22 @@ function renderPieChart(projects) {
   const pie = d3.pie()
     .value(d => d.count);
 
-  const path = d3.arc()
+  // Define the default arc generator.
+  const arcGenerator = d3.arc()
     .outerRadius(radius - 10)
     .innerRadius(0);
 
+  // Define a hover arc generator that produces a slightly larger arc.
+  const arcHover = d3.arc()
+    .outerRadius(hoverRadius)
+    .innerRadius(0);
+
+  // Define label generator.
   const label = d3.arc()
     .outerRadius(radius)
     .innerRadius(radius - 80);
 
-  const arc = svg.selectAll('.arc')
+  const arcs = svg.selectAll('.arc')
     .data(pie(data))
     .enter().append('g')
     .attr('class', 'arc')
@@ -86,24 +96,26 @@ function renderPieChart(projects) {
         filterProjectsByYear(d.data.year);
       }
     })
-    .on('mouseover', function() {
-      // Highlight the wedge on hover
+    .on('mouseover', function(event, d) {
+      // Transition the arc to a larger size
       d3.select(this).select('path')
-        .attr('stroke', 'black')
-        .attr('stroke-width', 2);
+        .transition()
+        .duration(200)
+        .attr('d', arcHover);
     })
-    .on('mouseout', function() {
-      // Remove the highlight on mouse out
+    .on('mouseout', function(event, d) {
+      // Transition back to the default size
       d3.select(this).select('path')
-        .attr('stroke', null)
-        .attr('stroke-width', null);
+        .transition()
+        .duration(200)
+        .attr('d', arcGenerator);
     });
 
-  arc.append('path')
-    .attr('d', path)
+  arcs.append('path')
+    .attr('d', arcGenerator)
     .attr('fill', d => color(d.data.year));
 
-  arc.append('text')
+  arcs.append('text')
     .attr('transform', d => `translate(${label.centroid(d)})`)
     .attr('dy', '0.35em')
     .text(d => d.data.year);
@@ -134,19 +146,7 @@ function clearPieChart() {
 
 function filterProjectsByYear(year) {
   const projectsContainer = document.querySelector('.projects');
-  // Fetch all projects again (from a cached global variable or refetch if needed)
-  // Here, we assume the full data is still stored in allProjects.
-  // Since allProjects is declared in DOMContentLoaded, we can attach it to window for ease.
   const allProjects = window.allProjectsData || [];
   const filteredProjects = allProjects.filter(project => project.year == year);
   renderProjects(filteredProjects, projectsContainer, 'h3');
 }
-
-// Store the fetched projects in a global variable for filtering
-// This is set once the DOM is loaded.
-document.addEventListener('DOMContentLoaded', async () => {
-  const projectsData = await fetchJSON('./lib/projects.json');
-  if (projectsData) {
-    window.allProjectsData = projectsData;
-  }
-});
