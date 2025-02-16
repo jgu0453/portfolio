@@ -1,48 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - Jonathan Gu</title>
-    <link rel="stylesheet" href="../style.css">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="../global.js" type="module"></script>
-    <script src="./projects.js" type="module"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects - Jonathan Gu</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="./projects.js" type="module"></script>
 </head>
 <body>
-    <header>
-        <h1>Projects</h1>
-        <p>Here are some of my notable projects:</p>
-    </header>
+  <header>
+    <h1>Projects</h1>
+    <p>Here are some of my notable projects:</p>
+  </header>
 
-    <nav>
-        <a href="../index.html">Home</a> |
-        <a href="index.html" aria-current="page">Projects</a> |
-        <a href="../contact/index.html">Contact</a> |
-        <a href="../CV/index.html">CV</a> |
-        <a href="https://github.com/jgu0453" target="_blank">GitHub</a>
-    </nav>
+  <nav>
+    <a href="../index.html">Home</a> |
+    <a href="index.html" aria-current="page">Projects</a> |
+    <a href="../contact/index.html">Contact</a> |
+    <a href="../CV/index.html">CV</a> |
+    <a href="https://github.com/jgu0453" target="_blank">GitHub</a>
+  </nav>
 
-    <main>
-        <section>
-            <h2>Projects</h2>
-            <input type="text" id="search-input" placeholder="Search projects..." aria-label="Search projects">
-            <div class="projects grid-layout">
-                <!-- Projects will be dynamically loaded here -->
-            </div>
-        </section>
+  <main>
+    <!-- Search Section -->
+    <section>
+      <h2>Search Projects</h2>
+      <input type="text" id="search-input" placeholder="Search projects..." />
+    </section>
 
-        <section>
-            <h2>Project Distribution</h2>
-            <div id="pie-chart"></div>
-            <ul id="legend"></ul>
-        </section>
-    </main>
+    <!-- Projects List Section -->
+    <section>
+      <h2>Projects</h2>
+      <div class="projects grid-layout">
+        <!-- Projects will be dynamically loaded here -->
+      </div>
+    </section>
 
-    <button class="dark-mode-toggle">Dark Mode</button>
+    <!-- Pie Chart Section -->
+    <section>
+      <h2>Project Distribution by Year</h2>
+      <div id="pie-chart"></div>
+      <div id="legend"></div>
+    </section>
+  </main>
 
-    <footer>
-        <p>&copy; 2025 Jonathan Gu. All rights reserved.</p>
-    </footer>
+  <button class="dark-mode-toggle">Dark Mode</button>
+
+  <footer>
+    <p>&copy; 2025 Jonathan Gu. All rights reserved.</p>
+  </footer>
 </body>
 </html>
