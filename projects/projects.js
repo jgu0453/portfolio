@@ -4,13 +4,15 @@ import { fetchJSON, renderProjects } from '../global.js';
 document.addEventListener('DOMContentLoaded', async () => {
   const projectsContainer = document.querySelector('.projects');
   const searchInput = document.getElementById('search-input');
-  let projects = [];
+  let allProjects = [];
 
   try {
-    projects = await fetchJSON('./lib/projects.json');
-    if (projects) {
-      renderProjects(projects, projectsContainer, 'h3');
-      renderPieChart(projects);
+    allProjects = await fetchJSON('./lib/projects.json');
+    if (allProjects) {
+      // Always render projects list from the (possibly filtered) data
+      renderProjects(allProjects, projectsContainer, 'h3');
+      // Render the pie chart once, using the full dataset.
+      renderPieChart(allProjects);
     } else {
       console.error('No projects data found.');
     }
@@ -18,17 +20,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Failed to load projects:', error);
   }
 
-  // Search functionality
+  // Search functionality: only filter the projects list.
   searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase();
-    const filteredProjects = projects.filter(project =>
+    const filteredProjects = allProjects.filter(project =>
       project.title.toLowerCase().includes(query) ||
       project.description.toLowerCase().includes(query) ||
       project.year.toString().includes(query)
     );
     renderProjects(filteredProjects, projectsContainer, 'h3');
-    clearPieChart(); // clear previous pie chart and legend
-    renderPieChart(filteredProjects);
+    // Do not re-render pie chart on search.
   });
 });
 
@@ -50,6 +51,9 @@ function renderPieChart(projects) {
 
   // Use D3's schemeCategory10 for colors
   const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+  // Clear any existing pie chart
+  clearPieChart();
 
   const svg = d3.select('#pie-chart')
     .append('svg')
@@ -75,17 +79,24 @@ function renderPieChart(projects) {
     .attr('class', 'arc')
     .attr('tabindex', '0')
     .on('click', (event, d) => {
-      // Filter projects by selected year and re-render projects
-      const projectsContainer = document.querySelector('.projects');
-      const filteredProjects = projects.filter(project => project.year == d.data.year);
-      renderProjects(filteredProjects, projectsContainer, 'h3');
+      filterProjectsByYear(d.data.year);
     })
     .on('keydown', (event, d) => {
       if (event.key === 'Enter' || event.key === ' ') {
-        const projectsContainer = document.querySelector('.projects');
-        const filteredProjects = projects.filter(project => project.year == d.data.year);
-        renderProjects(filteredProjects, projectsContainer, 'h3');
+        filterProjectsByYear(d.data.year);
       }
+    })
+    .on('mouseover', function() {
+      // Highlight the wedge on hover
+      d3.select(this).select('path')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+    })
+    .on('mouseout', function() {
+      // Remove the highlight on mouse out
+      d3.select(this).select('path')
+        .attr('stroke', null)
+        .attr('stroke-width', null);
     });
 
   arc.append('path')
@@ -120,3 +131,22 @@ function clearPieChart() {
   d3.select('#pie-chart').selectAll('*').remove();
   d3.select('#legend').selectAll('*').remove();
 }
+
+function filterProjectsByYear(year) {
+  const projectsContainer = document.querySelector('.projects');
+  // Fetch all projects again (from a cached global variable or refetch if needed)
+  // Here, we assume the full data is still stored in allProjects.
+  // Since allProjects is declared in DOMContentLoaded, we can attach it to window for ease.
+  const allProjects = window.allProjectsData || [];
+  const filteredProjects = allProjects.filter(project => project.year == year);
+  renderProjects(filteredProjects, projectsContainer, 'h3');
+}
+
+// Store the fetched projects in a global variable for filtering
+// This is set once the DOM is loaded.
+document.addEventListener('DOMContentLoaded', async () => {
+  const projectsData = await fetchJSON('./lib/projects.json');
+  if (projectsData) {
+    window.allProjectsData = projectsData;
+  }
+});
