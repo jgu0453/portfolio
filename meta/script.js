@@ -20,13 +20,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   `;
 
   // Scatterplot Setup
-  const width = 900, height = 500, margin = { top: 50, right: 50, bottom: 50, left: 70 };
+  const width = 700, height = 400, margin = { top: 50, right: 30, bottom: 50, left: 70 };
   
   const svg = d3.select("#scatterplot").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", "100%")
+    .attr("height", "auto")
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
     .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
+    .attr("transform", `translate(${margin.left},${margin.top})");
 
   const xScale = d3.scaleTime()
     .domain(d3.extent(data, d => new Date(d.datetime)))
