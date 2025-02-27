@@ -20,19 +20,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   `;
 
   // Scatterplot Setup
-  const width = 900, height = 500, margin = { top: 50, right: 30, bottom: 50, left: 70 };
+  const width = 900, height = 500, margin = { top: 50, right: 50, bottom: 50, left: 70 };
   
   const svg = d3.select("#scatterplot").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
 
   const xScale = d3.scaleTime()
     .domain(d3.extent(data, d => new Date(d.datetime)))
-    .range([margin.left, width - margin.right]);
+    .range([0, width]);
 
   const yScale = d3.scaleLinear()
     .domain([0, 24]) // Time of day from 0:00 to 24:00
-    .range([height - margin.bottom, margin.top]);
+    .range([height, 0]);
 
   const rScale = d3.scaleSqrt()
     .domain([0, d3.max(data, d => +d.length)])
@@ -43,11 +45,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const yAxis = d3.axisLeft(yScale).tickFormat(d => `${d}:00`);
 
   svg.append("g")
-    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .attr("transform", `translate(0,${height})`)
     .call(xAxis);
 
   svg.append("g")
-    .attr("transform", `translate(${margin.left},0)`)
     .call(yAxis);
 
   // Plot circles
@@ -64,9 +65,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Title
   svg.append("text")
-    .attr("x", margin.left)
-    .attr("y", margin.top - 20)
+    .attr("x", width / 2)
+    .attr("y", -10)
     .attr("font-size", "20px")
     .attr("font-weight", "bold")
+    .attr("text-anchor", "middle")
     .text("Commits by time of day");
 });
