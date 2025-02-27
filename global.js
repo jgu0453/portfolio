@@ -53,16 +53,20 @@ document.addEventListener("DOMContentLoaded", () => {
   setupDarkModeToggle();
 });
 
-// Function to fetch JSON data
+// Function to fetch JSON or CSV data
 export async function fetchJSON(url) {
   try {
     const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+    if (url.endsWith(".csv")) {
+      const text = await response.text();
+      return d3.csvParse(text);
+    } else {
+      return await response.json();
     }
-    return await response.json();
   } catch (error) {
-    console.error('Error fetching JSON:', error);
+    console.error('Error fetching data:', error);
   }
 }
 
