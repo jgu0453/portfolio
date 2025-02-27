@@ -1,0 +1,38 @@
+name: Deploy Portfolio
+
+on:
+  push:
+    branches:
+      - main  # Adjust this if you're using a different branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # This specifies the OS that will be used for the GitHub Action
+
+    steps:
+      # Step 1: Checkout the code from the repository
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'  # This makes sure we fetch the full git history
+
+      # Step 2: Run Elocuent to generate the loc.csv file
+      - name: Run Elocuent
+        run: |
+          npx elocuent -d . -o meta/loc.csv
+
+      # Step 3: Commit and push the generated CSV file
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          mkdir -p meta  # Ensure the 'meta' directory exists
+          git pull
+          git add -f meta/loc.csv  # Force add the generated CSV file
+          git commit -m "Update code statistics" || echo "No changes to commit"  # Avoid failure if there's no change
+          git push
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
