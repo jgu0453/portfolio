@@ -57,32 +57,40 @@ document.addEventListener("DOMContentLoaded", async () => {
   svg.append("g")
     .call(d3.axisLeft(yScale).tickFormat(d => `${d}:00`));
 
-  // Plot circles with animation
-  svg.selectAll("circle")
-    .data(data)
-    .enter().append("circle")
-    .attr("cx", d => xScale(d.datetime))
-    .attr("cy", d => yScale(d.datetime.getHours()))
-    .attr("r", 0) // Start small
-    .attr("fill", "steelblue")
-    .attr("opacity", 0.7)
-    .transition()
-    .duration(1000)
-    .attr("r", d => rScale(d.length));
+  // Scatterplot Update Function
+  const updateScatterplot = (filteredData) => {
+    const circles = svg.selectAll("circle").data(filteredData, d => d.commit);
 
-  // Tooltip
-  svg.selectAll("circle")
-    .append("title")
-    .text(d => `Commit: ${d.commit}\nLines Changed: ${d.length}`);
+    circles.enter().append("circle")
+      .attr("cx", d => xScale(d.datetime))
+      .attr("cy", d => yScale(d.datetime.getHours()))
+      .attr("r", 0)
+      .attr("fill", "steelblue")
+      .attr("opacity", 0.7)
+      .transition()
+      .duration(1000)
+      .attr("r", d => rScale(d.length));
 
-  // Title
-  svg.append("text")
-    .attr("x", width / 2)
-    .attr("y", -10)
-    .attr("font-size", "20px")
-    .attr("font-weight", "bold")
-    .attr("text-anchor", "middle")
-    .text("Commits by time of day");
+    circles.exit().remove();
+  };
+
+  // Initial Scatterplot Render
+  updateScatterplot(data);
+
+  // Slider Implementation
+  const slider = document.getElementById("commit-slider");
+  const sliderLabel = document.getElementById("commit-slider-label");
+  
+  slider.min = d3.min(data, d => d.datetime).getTime();
+  slider.max = d3.max(data, d => d.datetime).getTime();
+  slider.value = slider.max;
+
+  slider.addEventListener("input", () => {
+    const selectedDate = new Date(+slider.value);
+    sliderLabel.textContent = selectedDate.toLocaleString();
+    const filteredData = data.filter(d => d.datetime <= selectedDate);
+    updateScatterplot(filteredData);
+  });
 
   // Commit Scrollytelling with Scrollable Section
   const commitScrolly = d3.select("#commit-scrollytelling")
@@ -94,13 +102,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   commitScrolly.selectAll("p")
     .data(data)
     .enter().append("p")
-    .html(d => `
+    .html(d => 
       On ${d.datetime.toLocaleString("en", { dateStyle: "full", timeStyle: "short" })}, I made
       <a href="https://github.com/jgu0453/commit/${d.commit}" target="_blank">
         ${d.commit === data[0].commit ? 'my first commit, and it was glorious' : 'another glorious commit'}
       </a>. 
       I edited ${d.length} lines across 1 file. Then I looked over all I had made, and I saw that it was very good.
-    `);
+    );
 
   // File Size Visualization
   const fileData = d3.rollups(data, v => d3.sum(v, d => d.length), d => d.file);
