@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .attr("text-anchor", "middle")
     .text("Commits by time of day");
 
-  // Commit Scrollytelling
+  // Scrollytelling Setup (For Commit History)
   let NUM_ITEMS = 100;
   let ITEM_HEIGHT = 30;
   let VISIBLE_COUNT = 10;
