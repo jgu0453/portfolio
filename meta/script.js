@@ -25,6 +25,62 @@ document.addEventListener("DOMContentLoaded", async () => {
     <p><strong>Files Affected:</strong> ${totalFiles}</p>
   `;
 
+  // Scatterplot Setup
+  const width = 900, height = 500, margin = { top: 50, right: 50, bottom: 50, left: 70 };
+  
+  const svg = d3.select("#scatterplot").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  const xScale = d3.scaleTime()
+    .domain(d3.extent(data, d => d.datetime))
+    .range([0, width]);
+
+  const yScale = d3.scaleLinear()
+    .domain([0, 24])
+    .range([height, 0]);
+
+  const rScale = d3.scaleSqrt()
+    .domain([0, d3.max(data, d => d.length)])
+    .range([5, 30]);
+
+  // Axes
+  svg.append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(xScale).ticks(10));
+
+  svg.append("g")
+    .call(d3.axisLeft(yScale).tickFormat(d => `${d}:00`));
+
+  // Plot circles with animation
+  svg.selectAll("circle")
+    .data(data)
+    .enter().append("circle")
+    .attr("cx", d => xScale(d.datetime))
+    .attr("cy", d => yScale(d.datetime.getHours()))
+    .attr("r", 0) // Start small
+    .attr("fill", "steelblue")
+    .attr("opacity", 0.7)
+    .transition()
+    .duration(1000)
+    .attr("r", d => rScale(d.length));
+
+  // Tooltip
+  svg.selectAll("circle")
+    .append("title")
+    .text(d => `Commit: ${d.commit}\nLines Changed: ${d.length}`);
+
+  // Title
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", -10)
+    .attr("font-size", "20px")
+    .attr("font-weight", "bold")
+    .attr("text-anchor", "middle")
+    .text("Commits by time of day");
+
   // Commit Scrollytelling
   const commitScrolly = d3.select("#commit-scrollytelling");
 
@@ -42,34 +98,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   // File Size Visualization
   const fileData = d3.rollups(data, v => d3.sum(v, d => d.length), d => d.file);
 
-  const width = 600, height = 300;
-  const svg = d3.select("#file-size-viz").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+  const fileWidth = 600, fileHeight = 300;
+  const fileSvg = d3.select("#file-size-viz").append("svg")
+    .attr("width", fileWidth)
+    .attr("height", fileHeight);
 
-  const xScale = d3.scaleBand()
+  const xScaleFile = d3.scaleBand()
     .domain(fileData.map(d => d[0]))
-    .range([0, width])
+    .range([0, fileWidth])
     .padding(0.1);
 
-  const yScale = d3.scaleLinear()
+  const yScaleFile = d3.scaleLinear()
     .domain([0, d3.max(fileData, d => d[1])])
-    .range([height, 0]);
+    .range([fileHeight, 0]);
 
-  svg.selectAll(".bar")
+  fileSvg.selectAll(".bar")
     .data(fileData)
     .enter().append("rect")
     .attr("class", "bar")
-    .attr("x", d => xScale(d[0]))
-    .attr("y", d => yScale(d[1]))
-    .attr("width", xScale.bandwidth())
-    .attr("height", d => height - yScale(d[1]))
+    .attr("x", d => xScaleFile(d[0]))
+    .attr("y", d => yScaleFile(d[1]))
+    .attr("width", xScaleFile.bandwidth())
+    .attr("height", d => fileHeight - yScaleFile(d[1]))
     .attr("fill", "steelblue");
 
-  svg.append("g")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(xScale));
+  fileSvg.append("g")
+    .attr("transform", `translate(0,${fileHeight})`)
+    .call(d3.axisBottom(xScaleFile));
 
-  svg.append("g")
-    .call(d3.axisLeft(yScale));
+  fileSvg.append("g")
+    .call(d3.axisLeft(yScaleFile));
 });
