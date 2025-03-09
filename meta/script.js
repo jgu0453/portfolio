@@ -19,11 +19,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const totalLinesAdded = d3.sum(data, d => d.length);
   const totalFiles = new Set(data.map(d => d.file)).size;
 
-  document.getElementById("summary-stats").innerHTML = `
+  document.getElementById("summary-stats").innerHTML = 
     <p><strong>Total Commits:</strong> ${totalCommits}</p>
     <p><strong>Lines Added:</strong> ${totalLinesAdded}</p>
     <p><strong>Files Affected:</strong> ${totalFiles}</p>
-  `;
+  ;
 
   // Scatterplot Setup
   const container = document.getElementById("scatterplot");
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .style("max-width", "100%")
     .style("overflow", "hidden")
     .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
+    .attr("transform", translate(${margin.left},${margin.top}));
 
   const xScale = d3.scaleTime()
     .domain(d3.extent(data, d => d.datetime))
@@ -51,46 +51,38 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Axes
   svg.append("g")
-    .attr("transform", `translate(0,${height})`)
+    .attr("transform", translate(0,${height}))
     .call(d3.axisBottom(xScale).ticks(10));
 
   svg.append("g")
-    .call(d3.axisLeft(yScale).tickFormat(d => `${d}:00`));
+    .call(d3.axisLeft(yScale).tickFormat(d => ${d}:00));
 
-  // Scatterplot Update Function
-  const updateScatterplot = (filteredData) => {
-    const circles = svg.selectAll("circle").data(filteredData, d => d.commit);
+  // Plot circles with animation
+  svg.selectAll("circle")
+    .data(data)
+    .enter().append("circle")
+    .attr("cx", d => xScale(d.datetime))
+    .attr("cy", d => yScale(d.datetime.getHours()))
+    .attr("r", 0) // Start small
+    .attr("fill", "steelblue")
+    .attr("opacity", 0.7)
+    .transition()
+    .duration(1000)
+    .attr("r", d => rScale(d.length));
 
-    circles.enter().append("circle")
-      .attr("cx", d => xScale(d.datetime))
-      .attr("cy", d => yScale(d.datetime.getHours()))
-      .attr("r", 0)
-      .attr("fill", "steelblue")
-      .attr("opacity", 0.7)
-      .transition()
-      .duration(1000)
-      .attr("r", d => rScale(d.length));
+  // Tooltip
+  svg.selectAll("circle")
+    .append("title")
+    .text(d => Commit: ${d.commit}\nLines Changed: ${d.length});
 
-    circles.exit().remove();
-  };
-
-  // Initial Scatterplot Render
-  updateScatterplot(data);
-
-  // Slider Implementation
-  const slider = document.getElementById("commit-slider");
-  const sliderLabel = document.getElementById("commit-slider-label");
-  
-  slider.min = d3.min(data, d => d.datetime).getTime();
-  slider.max = d3.max(data, d => d.datetime).getTime();
-  slider.value = slider.max;
-
-  slider.addEventListener("input", () => {
-    const selectedDate = new Date(+slider.value);
-    sliderLabel.textContent = selectedDate.toLocaleString();
-    const filteredData = data.filter(d => d.datetime <= selectedDate);
-    updateScatterplot(filteredData);
-  });
+  // Title
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", -10)
+    .attr("font-size", "20px")
+    .attr("font-weight", "bold")
+    .attr("text-anchor", "middle")
+    .text("Commits by time of day");
 
   // Commit Scrollytelling with Scrollable Section
   const commitScrolly = d3.select("#commit-scrollytelling")
@@ -138,7 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .attr("fill", "steelblue");
 
   fileSvg.append("g")
-    .attr("transform", `translate(0,${fileHeight})`)
+    .attr("transform", translate(0,${fileHeight}))
     .call(d3.axisBottom(xScaleFile));
 
   fileSvg.append("g")
