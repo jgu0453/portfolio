@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .call(d3.axisLeft(yScale).tickFormat(d => `${d}:00`));
 
   // Plot circles with animation
-  svg.selectAll("circle")
+  const circles = svg.selectAll("circle")
     .data(data)
     .enter().append("circle")
     .attr("cx", d => xScale(d.datetime))
@@ -71,8 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .attr("r", d => rScale(d.length));
 
   // Tooltip
-  svg.selectAll("circle")
-    .append("title")
+  circles.append("title")
     .text(d => `Commit: ${d.commit}\nLines Changed: ${d.length}`);
 
   // Title
@@ -135,4 +134,40 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   fileSvg.append("g")
     .call(d3.axisLeft(yScaleFile));
+
+  // Scrollbar for commit date filter
+  const slider = d3.select("#date-slider")
+    .attr("type", "range")
+    .attr("min", data[0].datetime.getTime())
+    .attr("max", data[data.length - 1].datetime.getTime())
+    .attr("value", data[data.length - 1].datetime.getTime())
+    .on("input", function() {
+      const selectedDate = new Date(this.value);
+      // Filter data based on the selected date
+      const filteredData = data.filter(d => d.datetime <= selectedDate);
+
+      // Update scatterplot
+      circles.data(filteredData)
+        .transition()
+        .duration(500)
+        .attr("cx", d => xScale(d.datetime))
+        .attr("cy", d => yScale(d.datetime.getHours()))
+        .attr("r", d => rScale(d.length));
+
+      // Update commit scrollytelling
+      commitScrolly.selectAll("p")
+        .data(filteredData)
+        .join(
+          enter => enter.append("p")
+            .html(d => `
+              On ${d.datetime.toLocaleString("en", { dateStyle: "full", timeStyle: "short" })}, I made
+              <a href="https://github.com/jgu0453/commit/${d.commit}" target="_blank">
+                ${d.commit === data[0].commit ? 'my first commit, and it was glorious' : 'another glorious commit'}
+              </a>. 
+              I edited ${d.length} lines across 1 file. Then I looked over all I had made, and I saw that it was very good.
+            `),
+          update => update,
+          exit => exit.remove()
+        );
+    });
 });
