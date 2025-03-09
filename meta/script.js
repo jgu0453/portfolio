@@ -26,11 +26,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   `;
 
   // Scatterplot Setup
-  const width = 900, height = 500, margin = { top: 50, right: 50, bottom: 50, left: 70 };
+  const container = document.getElementById("scatterplot");
+  const width = container.clientWidth - 100, height = 500, margin = { top: 50, right: 50, bottom: 50, left: 70 };
   
   const svg = d3.select("#scatterplot").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .style("max-width", "100%")
+    .style("overflow", "hidden")
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -81,12 +84,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     .attr("text-anchor", "middle")
     .text("Commits by time of day");
 
-  // Commit Scrollytelling with Scrollable Section
-  const commitScrolly = d3.select("#commit-scrollytelling")
-    .style("max-height", "300px") // Set a fixed height
-    .style("overflow-y", "auto") // Enable scrolling
-    .style("border", "1px solid #ddd") // Add a border for visibility
-    .style("padding", "10px");
+  // Commit Scrollytelling
+  const commitScrolly = d3.select("#commit-scrollytelling");
 
   commitScrolly.selectAll("p")
     .data(data)
