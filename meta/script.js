@@ -25,116 +25,51 @@ document.addEventListener("DOMContentLoaded", async () => {
     <p><strong>Files Affected:</strong> ${totalFiles}</p>
   `;
 
-  // Scatterplot Setup
-  const width = 900, height = 500, margin = { top: 50, right: 50, bottom: 50, left: 70 };
-  
-  const svg = d3.select("#scatterplot").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
+  // Commit Scrollytelling
+  const commitScrolly = d3.select("#commit-scrollytelling");
 
-  const xScale = d3.scaleTime()
-    .domain(d3.extent(data, d => d.datetime))
-    .range([0, width]);
+  commitScrolly.selectAll("p")
+    .data(data)
+    .enter().append("p")
+    .html(d => `
+      On ${d.datetime.toLocaleString("en", { dateStyle: "full", timeStyle: "short" })}, I made
+      <a href="https://github.com/jgu0453/commit/${d.commit}" target="_blank">
+        ${d.commit === data[0].commit ? 'my first commit, and it was glorious' : 'another glorious commit'}
+      </a>. 
+      I edited ${d.length} lines across 1 file. Then I looked over all I had made, and I saw that it was very good.
+    `);
+
+  // File Size Visualization
+  const fileData = d3.rollups(data, v => d3.sum(v, d => d.length), d => d.file);
+
+  const width = 600, height = 300;
+  const svg = d3.select("#file-size-viz").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+  const xScale = d3.scaleBand()
+    .domain(fileData.map(d => d[0]))
+    .range([0, width])
+    .padding(0.1);
 
   const yScale = d3.scaleLinear()
-    .domain([0, 24])
+    .domain([0, d3.max(fileData, d => d[1])])
     .range([height, 0]);
 
-  const rScale = d3.scaleSqrt()
-    .domain([0, d3.max(data, d => d.length)])
-    .range([5, 30]);
+  svg.selectAll(".bar")
+    .data(fileData)
+    .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", d => xScale(d[0]))
+    .attr("y", d => yScale(d[1]))
+    .attr("width", xScale.bandwidth())
+    .attr("height", d => height - yScale(d[1]))
+    .attr("fill", "steelblue");
 
-  // Axes
   svg.append("g")
     .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(xScale).ticks(10));
+    .call(d3.axisBottom(xScale));
 
   svg.append("g")
-    .call(d3.axisLeft(yScale).tickFormat(d => `${d}:00`));
-
-  // Plot circles with animation
-  svg.selectAll("circle")
-    .data(data)
-    .enter().append("circle")
-    .attr("cx", d => xScale(d.datetime))
-    .attr("cy", d => yScale(d.datetime.getHours()))
-    .attr("r", 0) // Start small
-    .attr("fill", "steelblue")
-    .attr("opacity", 0.7)
-    .transition()
-    .duration(1000)
-    .attr("r", d => rScale(d.length));
-
-  // Tooltip
-  svg.selectAll("circle")
-    .append("title")
-    .text(d => `Commit: ${d.commit}\nLines Changed: ${d.length}`);
-
-  // Title
-  svg.append("text")
-    .attr("x", width / 2)
-    .attr("y", -10)
-    .attr("font-size", "20px")
-    .attr("font-weight", "bold")
-    .attr("text-anchor", "middle")
-    .text("Commits by time of day");
-
-  // Scrollytelling Setup (For Commit History)
-  let NUM_ITEMS = 100;
-  let ITEM_HEIGHT = 30;
-  let VISIBLE_COUNT = 10;
-  let totalHeight = (NUM_ITEMS - 1) * ITEM_HEIGHT;
-  const scrollContainer = d3.select('#scroll-container');
-  const spacer = d3.select('#spacer');
-  spacer.style('height', `${totalHeight}px`);
-  const itemsContainer = d3.select('#items-container');
-  
-  scrollContainer.on('scroll', () => {
-    const scrollTop = scrollContainer.property('scrollTop');
-    let startIndex = Math.floor(scrollTop / ITEM_HEIGHT);
-    startIndex = Math.max(0, Math.min(startIndex, data.length - VISIBLE_COUNT));
-    renderItems(startIndex);
-  });
-
-  function renderItems(startIndex) {
-    itemsContainer.selectAll('div').remove();
-    const endIndex = Math.min(startIndex + VISIBLE_COUNT, data.length);
-    let newCommitSlice = data.slice(startIndex, endIndex);
-    
-    itemsContainer.selectAll('div')
-                  .data(newCommitSlice)
-                  .enter()
-                  .append('div')
-                  .html(d => `
-                    <p>
-                      On ${d.datetime.toLocaleString("en", {dateStyle: "full", timeStyle: "short"})}, I made
-                      <a href="${d.url}" target="_blank">my commit</a>. 
-                      I edited ${d.length} lines across 1 file.
-                    </p>
-                  `)
-                  .style('position', 'absolute')
-                  .style('top', (_, idx) => `${idx * ITEM_HEIGHT}px`);
-  }
-
-  // File Size Scrollytelling
-  function displayCommitFiles() {
-    const lines = data.flatMap(d => d.lines);
-    let fileTypeColors = d3.scaleOrdinal(d3.schemeTableau10);
-    let files = d3.groups(lines, (d) => d.file).map(([name, lines]) => {
-      return { name, lines };
-    });
-    files = d3.sort(files, (d) => -d.lines.length);
-    d3.select('.files').selectAll('div').remove();
-    let filesContainer = d3.select('.files').selectAll('div').data(files).enter().append('div');
-    filesContainer.append('dt').html(d => `<code>${d.name}</code><small>${d.lines.length} lines</small>`);
-    filesContainer.append('dd')
-                  .selectAll('div')
-                  .data(d => d.lines)
-                  .enter()
-                  .append('div')
-                  .attr('class', 'line')
-                  .style('background', d => fileTypeColors(d.type));
-  }
+    .call(d3.axisLeft(yScale));
 });
