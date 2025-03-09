@@ -80,4 +80,61 @@ document.addEventListener("DOMContentLoaded", async () => {
     .attr("font-weight", "bold")
     .attr("text-anchor", "middle")
     .text("Commits by time of day");
+
+  // Commit Scrollytelling
+  let NUM_ITEMS = 100;
+  let ITEM_HEIGHT = 30;
+  let VISIBLE_COUNT = 10;
+  let totalHeight = (NUM_ITEMS - 1) * ITEM_HEIGHT;
+  const scrollContainer = d3.select('#scroll-container');
+  const spacer = d3.select('#spacer');
+  spacer.style('height', `${totalHeight}px`);
+  const itemsContainer = d3.select('#items-container');
+  
+  scrollContainer.on('scroll', () => {
+    const scrollTop = scrollContainer.property('scrollTop');
+    let startIndex = Math.floor(scrollTop / ITEM_HEIGHT);
+    startIndex = Math.max(0, Math.min(startIndex, data.length - VISIBLE_COUNT));
+    renderItems(startIndex);
+  });
+
+  function renderItems(startIndex) {
+    itemsContainer.selectAll('div').remove();
+    const endIndex = Math.min(startIndex + VISIBLE_COUNT, data.length);
+    let newCommitSlice = data.slice(startIndex, endIndex);
+    
+    itemsContainer.selectAll('div')
+                  .data(newCommitSlice)
+                  .enter()
+                  .append('div')
+                  .html(d => `
+                    <p>
+                      On ${d.datetime.toLocaleString("en", {dateStyle: "full", timeStyle: "short"})}, I made
+                      <a href="${d.url}" target="_blank">my commit</a>. 
+                      I edited ${d.length} lines across 1 file.
+                    </p>
+                  `)
+                  .style('position', 'absolute')
+                  .style('top', (_, idx) => `${idx * ITEM_HEIGHT}px`);
+  }
+
+  // File Size Scrollytelling
+  function displayCommitFiles() {
+    const lines = data.flatMap(d => d.lines);
+    let fileTypeColors = d3.scaleOrdinal(d3.schemeTableau10);
+    let files = d3.groups(lines, (d) => d.file).map(([name, lines]) => {
+      return { name, lines };
+    });
+    files = d3.sort(files, (d) => -d.lines.length);
+    d3.select('.files').selectAll('div').remove();
+    let filesContainer = d3.select('.files').selectAll('div').data(files).enter().append('div');
+    filesContainer.append('dt').html(d => `<code>${d.name}</code><small>${d.lines.length} lines</small>`);
+    filesContainer.append('dd')
+                  .selectAll('div')
+                  .data(d => d.lines)
+                  .enter()
+                  .append('div')
+                  .attr('class', 'line')
+                  .style('background', d => fileTypeColors(d.type));
+  }
 });
