@@ -57,22 +57,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   svg.append("g")
     .call(d3.axisLeft(yScale).tickFormat(d => `${d}:00`));
 
-  // Scatterplot Update Function
-  const updateScatterplot = (filteredData) => {
-    const circles = svg.selectAll("circle").data(filteredData, d => d.commit);
+  // Plot circles with animation
+  svg.selectAll("circle")
+    .data(data)
+    .enter().append("circle")
+    .attr("cx", d => xScale(d.datetime))
+    .attr("cy", d => yScale(d.datetime.getHours()))
+    .attr("r", 0) // Start small
+    .attr("fill", "steelblue")
+    .attr("opacity", 0.7)
+    .transition()
+    .duration(1000)
+    .attr("r", d => rScale(d.length));
 
-    circles.enter().append("circle")
-      .attr("cx", d => xScale(d.datetime))
-      .attr("cy", d => yScale(d.datetime.getHours()))
-      .attr("r", 0)
-      .attr("fill", "steelblue")
-      .attr("opacity", 0.7)
-      .transition()
-      .duration(1000)
-      .attr("r", d => rScale(d.length));
+  // Tooltip
+  svg.selectAll("circle")
+    .append("title")
+    .text(d => `Commit: ${d.commit}\nLines Changed: ${d.length}`);
 
-    circles.exit().remove();
-  };
+  // Title
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", -10)
+    .attr("font-size", "20px")
+    .attr("font-weight", "bold")
+    .attr("text-anchor", "middle")
+    .text("Commits by time of day");
 
   // Commit Scrollytelling with Scrollable Section
   const commitScrolly = d3.select("#commit-scrollytelling")
