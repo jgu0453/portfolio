@@ -81,8 +81,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     .attr("text-anchor", "middle")
     .text("Commits by time of day");
 
-  // Commit Scrollytelling
-  const commitScrolly = d3.select("#commit-scrollytelling");
+  // Commit Scrollytelling with Scrollable Section
+  const commitScrolly = d3.select("#commit-scrollytelling")
+    .style("max-height", "300px") // Set a fixed height
+    .style("overflow-y", "auto") // Enable scrolling
+    .style("border", "1px solid #ddd") // Add a border for visibility
+    .style("padding", "10px");
 
   commitScrolly.selectAll("p")
     .data(data)
