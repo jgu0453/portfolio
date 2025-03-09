@@ -1,17 +1,23 @@
 import { fetchJSON } from "../global.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const data = await fetchJSON("loc.csv"); // Ensure this CSV is generated and correctly located
+  const data = await fetchJSON("loc.csv");
 
   if (!data) {
     console.error("Failed to load commit data.");
     return;
   }
 
+  // Process data
+  data.forEach(d => {
+    d.datetime = new Date(d.datetime);
+    d.length = +d.length;
+  });
+
   // Summary Statistics
-  const totalCommits = new Set(data.map(d => d.commit)).size; // Count unique commits
-  const totalLinesAdded = d3.sum(data, d => +d.length); // Assuming 'length' represents added lines
-  const totalFiles = new Set(data.map(d => d.file)).size; // Count unique files
+  const totalCommits = new Set(data.map(d => d.commit)).size;
+  const totalLinesAdded = d3.sum(data, d => d.length);
+  const totalFiles = new Set(data.map(d => d.file)).size;
 
   document.getElementById("summary-stats").innerHTML = `
     <p><strong>Total Commits:</strong> ${totalCommits}</p>
@@ -29,37 +35,40 @@ document.addEventListener("DOMContentLoaded", async () => {
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
   const xScale = d3.scaleTime()
-    .domain(d3.extent(data, d => new Date(d.datetime)))
+    .domain(d3.extent(data, d => d.datetime))
     .range([0, width]);
 
   const yScale = d3.scaleLinear()
-    .domain([0, 24]) // Time of day from 0:00 to 24:00
+    .domain([0, 24])
     .range([height, 0]);
 
   const rScale = d3.scaleSqrt()
-    .domain([0, d3.max(data, d => +d.length)])
-    .range([5, 30]); // Bubble size based on lines changed
+    .domain([0, d3.max(data, d => d.length)])
+    .range([5, 30]);
 
   // Axes
-  const xAxis = d3.axisBottom(xScale).ticks(10);
-  const yAxis = d3.axisLeft(yScale).tickFormat(d => `${d}:00`);
-
   svg.append("g")
     .attr("transform", `translate(0,${height})`)
-    .call(xAxis);
+    .call(d3.axisBottom(xScale).ticks(10));
 
   svg.append("g")
-    .call(yAxis);
+    .call(d3.axisLeft(yScale).tickFormat(d => `${d}:00`));
 
-  // Plot circles
+  // Plot circles with animation
   svg.selectAll("circle")
     .data(data)
     .enter().append("circle")
-    .attr("cx", d => xScale(new Date(d.datetime)))
-    .attr("cy", d => yScale(new Date(d.datetime).getHours()))
-    .attr("r", d => rScale(d.length))
+    .attr("cx", d => xScale(d.datetime))
+    .attr("cy", d => yScale(d.datetime.getHours()))
+    .attr("r", 0) // Start small
     .attr("fill", "steelblue")
     .attr("opacity", 0.7)
+    .transition()
+    .duration(1000)
+    .attr("r", d => rScale(d.length));
+
+  // Tooltip
+  svg.selectAll("circle")
     .append("title")
     .text(d => `Commit: ${d.commit}\nLines Changed: ${d.length}`);
 
